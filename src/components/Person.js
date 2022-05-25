@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from "react-router-dom";
-import axios from "axios";
 import Navbar from './Navbar'
 import HorizontalCard from "./HorizontalCard";
 
@@ -22,9 +21,9 @@ const Person = () => {
         <>
             <Navbar showBack={true}/>
             {
-                data && data.name && (
+                data && (
                     <HorizontalCard
-                        title={data.name}
+                        title={data.name ?? data.login}
                         subtitle={data.bio}
                         avatar={data.avatar_url}
                     />

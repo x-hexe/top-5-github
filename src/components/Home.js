@@ -1,18 +1,43 @@
-import React from 'react';
-import { Container, Button } from 'react-bootstrap';
+import React, { useState, useCallback } from 'react';
+import { Container, Button, InputGroup, FormControl } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
+import _debounce from 'lodash/debounce';
 import Navbar from './Navbar';
 
 const Home = () => {
     const navigate = useNavigate();
-    const users = ["GrahamCampbell", "fabpot", "weierophinney", "rkh", "josh"];
+    const [users, setUsers] = useState([]);
+
+    const getApiData = async (user) => {
+        const response = await fetch(`https://api.github.com/search/users?q=${user}`);
+        const json = await response.json();
+        return json.items || [];
+    };
+
+    const handleSearch = async (event) => {
+        try {
+            const response = await getApiData(event.target.value);
+            setUsers(response.map((user) => user.login))
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+    const handleSearchDebounce = useCallback(_debounce(handleSearch, 650), []);
 
     return (
         <>
             <Navbar/>
             <Container className={'mt-3'}>
-                <h1>Top 5 GitHub Users</h1>
-                <p>Tap the username to see more information</p>
+                <h1>GitHub Users</h1>
+                <p>Search username to see more information</p>
+
+                <InputGroup className="mb-3">
+                    <FormControl
+                        placeholder="Please enter a Github username"
+                        onChange={handleSearchDebounce}
+                    />
+                </InputGroup>
                 {
                     users.map((name, index) => (
                         <Button

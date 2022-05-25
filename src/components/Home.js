@@ -3,15 +3,15 @@ import { Container, Button, InputGroup, FormControl } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import _debounce from 'lodash/debounce';
 import Navbar from './Navbar';
+import axios from "axios";
 
 const Home = () => {
     const navigate = useNavigate();
     const [users, setUsers] = useState([]);
 
     const getApiData = async (user) => {
-        const response = await fetch(`https://api.github.com/search/users?q=${user}`);
-        const json = await response.json();
-        return json.items || [];
+        const { data } = await axios.get(`https://api.github.com/search/users?q=${user}`);
+        return data.items || [];
     };
 
     const handleSearch = async (event) => {

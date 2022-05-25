@@ -3,6 +3,8 @@ import { useParams } from "react-router-dom";
 import Navbar from './Navbar'
 import HorizontalCard from "./HorizontalCard";
 
+import axios from "axios";
+
 const Person = () => {
     const [data, setData] = useState({});
     const { name } = useParams();
